@@ -1,0 +1,15 @@
+@use "../../../../assets/styles/vars" as vars;
+
+.container {
+  height: 100%;
+  width: 100%;
+  background-color: vars.$background-primary;
+  position: relative;
+}
+
+.menu-trigger-container {
+  position: absolute;
+  top: 2.5rem;
+  right: 3rem;
+  z-index: 100;
+}

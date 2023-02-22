@@ -1,0 +1,117 @@
+<div
+  class="menu-container"
+  [class.menu-closed]="isClosed"
+  [class.menu-hidden]="isHidden"
+>
+  <header class="menu-header">
+    <a [routerLink]="link" class="link-logo icon-container">
+      <img
+        *ngIf="link.includes('timer')"
+        ngSrc="assets/icons/timer-icon.svg"
+        fill
+        priority
+        alt="Timer Icon"
+      />
+      <img
+        *ngIf="link.includes('graph')"
+        ngSrc="assets/icons/graph-icon.svg"
+        fill
+        priority
+        alt="Graph Icon"
+      />
+    </a>
+    <span class="tasks-progress">{{ ticksDone }}/{{ ticksTotal }}</span>
+  </header>
+
+  <div class="tasks-container">
+    <ng-container
+      *ngFor="let task of tasks | orderById; index as i; trackBy: identify"
+    >
+      <app-task
+        [isSelected]="currentTaskId === task.id"
+        [id]="task.id"
+        [index]="i + 1"
+        [name]="task.name"
+        [ticksDone]="task.ticksDone"
+        [ticksTotal]="task.ticksTotal"
+      ></app-task>
+    </ng-container>
+  </div>
+
+  <footer class="menu-footer">
+    <ng-container *ngIf="isWorkMode(); then resetWorkBtn; else switchToWorkBtn">
+    </ng-container>
+    <ng-container
+      *ngIf="
+        isShortBreak();
+        then resetShortBreakBtn;
+        else switchToShortBreakBtn
+      "
+    >
+    </ng-container>
+    <ng-container
+      *ngIf="isLongBreak(); then resetLongBreakBtn; else switchToLongBreakBtn"
+    >
+    </ng-container>
+  </footer>
+</div>
+
+<!-- Work Btn -->
+<ng-template #resetWorkBtn>
+  <button class="work-btn icon-container active" (click)="onWorkReset()">
+    <img ngSrc="assets/icons/reset-icon.svg" fill priority alt="Reset Icon" />
+  </button>
+</ng-template>
+<ng-template #switchToWorkBtn>
+  <button class="work-btn icon-container" (click)="onWork()">
+    <img ngSrc="assets/icons/work-icon.svg" fill priority alt="Work Icon" />
+  </button>
+</ng-template>
+
+<!-- Short Break Btn -->
+<ng-template #resetShortBreakBtn>
+  <button
+    class="short-break-btn icon-container active"
+    (click)="onShortBreakReset()"
+  >
+    <img ngSrc="assets/icons/reset-icon.svg" fill priority alt="Reset Icon" />
+  </button>
+</ng-template>
+<ng-template #switchToShortBreakBtn>
+  <button class="short-break-btn icon-container" (click)="onShortBreak()">
+    <img
+      ngSrc="assets/icons/short-break-icon.svg"
+      fill
+      priority
+      alt="Short Break Icon"
+    />
+  </button>
+</ng-template>
+
+<!-- Long Break Btn -->
+<ng-template #resetLongBreakBtn>
+  <button
+    class="long-break-btn icon-container active"
+    (click)="onLongBreakReset()"
+  >
+    <img ngSrc="assets/icons/reset-icon.svg" fill priority alt="Reset Icon" />
+  </button>
+</ng-template>
+<ng-template #switchToLongBreakBtn>
+  <button class="long-break-btn icon-container" (click)="onLongBreak()">
+    <img
+      ngSrc="assets/icons/long-break-icon.svg"
+      fill
+      priority
+      alt="Long Break Icon"
+    />
+  </button>
+</ng-template>
+
+<!-- Overlay -->
+<div
+  class="overlay"
+  (click)="closeMenu()"
+  [class.overlay-hidden]="isClosed"
+  [class.overlay-removed]="isHidden"
+></div>

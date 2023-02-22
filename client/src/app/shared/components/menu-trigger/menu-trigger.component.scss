@@ -1,0 +1,31 @@
+@use "../../../../assets/styles/vars" as vars;
+
+.menu-trigger {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  justify-content: space-between;
+  height: 1.9em;
+  cursor: pointer;
+}
+
+.work-mode .line {
+  background-color: vars.$active-timer-color;
+  box-shadow: 0 0 10px 0 vars.$active-timer-color;
+}
+
+.short-break-mode .line {
+  background-color: vars.$short-break-color;
+  box-shadow: 0 0 10px 0 vars.$short-break-color;
+}
+
+.long-break-mode .line {
+  background-color: vars.$long-break-color;
+  box-shadow: 0 0 10px 0 vars.$long-break-color;
+}
+
+.line {
+  height: 0.275em;
+  width: 2.5em;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}

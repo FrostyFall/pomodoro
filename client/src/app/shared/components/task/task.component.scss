@@ -1,0 +1,36 @@
+@use "../../../../assets/styles/vars" as vars;
+
+.task-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  border: 0.275em solid vars.$task-border-color;
+  padding: 1em;
+  cursor: pointer;
+
+  &.selected {
+    border-color: vars.$menu-text-secondary;
+  }
+}
+
+.task-info {
+  display: flex;
+  align-items: center;
+
+  .task-number {
+    color: vars.$menu-text-secondary;
+    margin-right: 1em;
+    font-size: 0.9em;
+  }
+
+  .task-name {
+    color: vars.$text-primary;
+    font-size: 1em;
+  }
+}
+
+.task-ticks-progress {
+  color: vars.$menu-text-secondary;
+  font-size: 0.9em;
+}

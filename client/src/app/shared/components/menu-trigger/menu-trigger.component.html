@@ -1,0 +1,13 @@
+<div
+  class="menu-trigger"
+  [ngClass]="{
+    'work-mode': isWorkMode(),
+    'short-break-mode': isShortBreakMode(),
+    'long-break-mode': isLongBreakMode()
+  }"
+  (click)="toggleMenu()"
+>
+  <div class="line"></div>
+  <div class="line"></div>
+  <div class="line"></div>
+</div>

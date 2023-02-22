@@ -1,0 +1,33 @@
+<div class="container" (click)="onHide()">
+  <div class="status info" *ngIf="notificationType === notificationTypes.Info">
+    <img ngSrc="assets/icons/info-icon.svg" fill priority alt="Info Icon" />
+  </div>
+  <div
+    class="status success"
+    *ngIf="notificationType === notificationTypes.Success"
+  >
+    <img
+      ngSrc="assets/icons/success-icon.svg"
+      fill
+      priority
+      alt="Success Icon"
+    />
+  </div>
+  <div
+    class="status error"
+    *ngIf="notificationType === notificationTypes.Error"
+  >
+    <img ngSrc="assets/icons/error-icon.svg" fill priority alt="Error Icon" />
+  </div>
+  <div class="message">{{ message }}</div>
+</div>
+
+<!-- <ng-template #infoIcon>
+  <img ngSrc="assets/icons/info-icon.svg" fill priority alt="Info Icon" />
+</ng-template>
+<ng-template #successIcon>
+  <img ngSrc="assets/icons/success-icon.svg" fill priority alt="Success Icon" />
+</ng-template>
+<ng-template #errorIcon>
+  <img ngSrc="assets/icons/error-icon.svg" fill priority alt="Error Icon" />
+</ng-template> -->

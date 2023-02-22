@@ -1,0 +1,7 @@
+<div class="task-container" (click)="onSelect()" [class.selected]="isSelected">
+  <div class="task-info">
+    <span class="task-number">{{ index }}</span>
+    <span class="task-name">{{ name }}</span>
+  </div>
+  <span class="task-ticks-progress">{{ ticksDone }}/{{ ticksTotal }}</span>
+</div>

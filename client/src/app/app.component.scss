@@ -1,0 +1,28 @@
+@use "../assets/styles/vars" as vars;
+
+.menu-trigger-container {
+  position: absolute;
+  top: 2.5rem;
+  right: 3rem;
+  z-index: 100;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  background-color: vars.$background-primary;
+  position: relative;
+}
+
+.snackbar-container {
+  position: absolute;
+  top: 2.5rem;
+  left: 3rem;
+  transform: translateY(calc(-100% - 2.5rem));
+  z-index: 100;
+  transition: transform 0.3s;
+
+  &.isShown {
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,28 @@
+<div class="timer-container">
+  <div
+    class="timer"
+    (click)="onToggleTimer()"
+    [ngClass]="{
+      'work-mode': isWorkMode(),
+      'short-break-mode': isShortBreakMode(),
+      'long-break-mode': isLongBreakMode(),
+      'timer-running': isTimerRunning
+    }"
+  >
+    <div class="sector part-1" #partOne></div>
+    <div class="sector part-2" #partTwo></div>
+    <div class="sector part-3" #partThree></div>
+    <div class="sector part-4" #partFour></div>
+    <div class="sector overlay" #overlay></div>
+    <div class="inner-circle">
+      <span class="time">{{ timeLeft | secsToTimeFormat }}</span>
+    </div>
+  </div>
+  <span class="task-info" *ngIf="isWorkMode()">{{ taskName }}</span>
+  <span class="task-info" *ngIf="isShortBreakMode()"
+    >Short time out. You deserved it!</span
+  >
+  <span class="task-info" *ngIf="isLongBreakMode()"
+    >Long one. Just chill and relax ✌️</span
+  >
+</div>
