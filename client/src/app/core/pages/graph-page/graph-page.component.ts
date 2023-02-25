@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { mergeMap } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, mergeMap, takeUntil } from 'rxjs';
 import * as Highcharts from 'highcharts';
 
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -18,11 +18,12 @@ import { ChartStyles } from '../../constants/chart-styles';
   standalone: true,
   imports: [CommonModule, SharedModule],
 })
-export class GraphPageComponent implements OnInit {
+export class GraphPageComponent implements OnInit, OnDestroy {
   chartObject: Highcharts.Chart | null = null;
   workLogs: ILog[] = [];
   shortBreakLogs: ILog[] = [];
   longBreakLogs: ILog[] = [];
+  destroy$ = new Subject<void>();
 
   constructor(
     private readonly graphService: GraphService,
@@ -34,10 +35,16 @@ export class GraphPageComponent implements OnInit {
     this.initializeSubscriptions();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private initializeSubscriptions(): void {
     this.graphService
       .getWorkLogs()
       .pipe(
+        takeUntil(this.destroy$),
         mergeMap((value: ILog[]) => {
           this.workLogs = value;
           return this.graphService.getShortBreakLogs();

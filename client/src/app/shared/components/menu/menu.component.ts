@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { TasksService } from '../../services/tasks.service';
 import { MenuService } from '../../services/menu.service';
@@ -12,7 +12,7 @@ import { Pages, Timers } from '../../constants';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss'],
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
   isClosed: boolean = false;
   isHidden: boolean = false;
   tasks$!: Observable<ITask[]>;
@@ -21,6 +21,7 @@ export class MenuComponent implements OnInit {
   link: string = '/graph';
   ticksDone: number = 0;
   ticksTotal: number = 0;
+  destroy$ = new Subject<void>();
 
   constructor(
     private readonly tasksService: TasksService,
@@ -32,8 +33,13 @@ export class MenuComponent implements OnInit {
     this.initializeSubscriptions();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private initializeSubscriptions(): void {
-    this.menuService.currentPage$.subscribe({
+    this.menuService.currentPage$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (value) => {
         switch (value) {
           case Pages.Graph:
@@ -48,7 +54,7 @@ export class MenuComponent implements OnInit {
         }
       },
     });
-    this.tasksService.tasks$.subscribe({
+    this.tasksService.tasks$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (value) => {
         this.tasks = value;
         this.ticksDone = 0;
@@ -59,7 +65,7 @@ export class MenuComponent implements OnInit {
         });
       },
     });
-    this.timerService.currentTask$.subscribe({
+    this.timerService.currentTask$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (value) => {
         if (value?.id) {
           this.currentTaskId = value.id;
@@ -68,7 +74,7 @@ export class MenuComponent implements OnInit {
         }
       },
     });
-    this.menuService.isOpen$.subscribe({
+    this.menuService.isOpen$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (value) => {
         if (!value) {
           this.isClosed = true;

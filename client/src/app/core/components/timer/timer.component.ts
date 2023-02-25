@@ -1,6 +1,7 @@
 import {
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   Renderer2,
   ViewChild,
@@ -8,6 +9,7 @@ import {
 import { TimerService } from '../../services/timer.service';
 import { CommonModule } from '@angular/common';
 import { SecsToTimeFormatPipe } from '../../pipes/secs-to-time-format.pipe';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-timer',
@@ -16,13 +18,14 @@ import { SecsToTimeFormatPipe } from '../../pipes/secs-to-time-format.pipe';
   standalone: true,
   imports: [CommonModule, SecsToTimeFormatPipe],
 })
-export class TimerComponent implements OnInit {
+export class TimerComponent implements OnInit, OnDestroy {
   timeLeft: number = 0;
   timeTotal: number = 0;
   taskName: string = '';
   isTimerRunning: boolean = false;
   overlayCounter: number = 0;
   transitionReset: boolean = false;
+  destroy$ = new Subject<void>();
 
   @ViewChild('partOne', { static: true }) partOne!: ElementRef;
   @ViewChild('partTwo', { static: true }) partTwo!: ElementRef;
@@ -39,11 +42,16 @@ export class TimerComponent implements OnInit {
     this.initializeSubscriptions();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private initializeSubscriptions(): void {
-    this.timerService.timeTotal$.subscribe({
+    this.timerService.timeTotal$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (value) => (this.timeTotal = value),
     });
-    this.timerService.timeLeft$.subscribe({
+    this.timerService.timeLeft$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (value) => {
         this.timeLeft = value;
 
@@ -57,7 +65,7 @@ export class TimerComponent implements OnInit {
         }
       },
     });
-    this.timerService.currentTask$.subscribe({
+    this.timerService.currentTask$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (value) => {
         if (value) {
           this.taskName = value.name;
@@ -67,10 +75,10 @@ export class TimerComponent implements OnInit {
         this.resetTimerStyles();
       },
     });
-    this.timerService.isTimerRunning$.subscribe({
+    this.timerService.isTimerRunning$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (value) => (this.isTimerRunning = value),
     });
-    this.timerService.currentMode$.subscribe({
+    this.timerService.currentMode$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => this.resetTimerStyles(),
     });
   }
